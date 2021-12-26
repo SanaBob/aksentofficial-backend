@@ -64,6 +64,6 @@ app.post('/createProduct', async (req: any, res: any) => {
     res.json(product);
 })
 
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log('server started on port 3001');
 })
