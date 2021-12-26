@@ -8,6 +8,18 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+const corsOptions = {
+    origin: ['http://localhost:3000', process.env.FRONT_END_URL],
+    optionsSuccessStatus: 200,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
+        'Access-Control-Allow-Credentials': true
+    }
+};
+
 app.use(cors());
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`);
