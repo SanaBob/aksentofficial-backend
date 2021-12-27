@@ -25,43 +25,51 @@ app.use(cors());
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`);
 
 app.get('/getProducts', (req: any, res) => {
-    if (!req.query.id && !req.query.name) {
-        ProductModel.find({}, (err: any, docs: any) => {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(docs);
-            }
-        });
-    } else if(req.query.id){
-        ProductModel.findById(req.query.id, (err: any, doc: any) => {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(doc);
-            }
-        });
-    } else if (req.query.name) {
-        ProductModel.findOne({name: req.query.name}, (err: any, doc: any) => {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(doc);
-            }
-        });
+    try{
+        if (!req.query.id && !req.query.name) {
+            ProductModel.find({}, (err: any, docs: any) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(docs);
+                }
+            });
+        } else if(req.query.id){
+            ProductModel.findById(req.query.id, (err: any, doc: any) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(doc);
+                }
+            });
+        } else if (req.query.name) {
+            ProductModel.findOne({name: req.query.name}, (err: any, doc: any) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(doc);
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e)
     }
 });
 
 app.post('/createProduct', async (req: any, res: any) => {
-    const product = new ProductModel({
-        url1: req.body.url1,
-        url2: req.body.url2,
-        name: req.body.name,
-        color: req.body.color,
-        size: req.body.size
-    });
-    await product.save();
-    res.json(product);
+    try{
+        const product = new ProductModel({
+            url1: req.body.url1,
+            url2: req.body.url2,
+            name: req.body.name,
+            color: req.body.color,
+            size: req.body.size
+        });
+        await product.save();
+        res.json(product);
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 app.listen(process.env.PORT || 3001, () => {
