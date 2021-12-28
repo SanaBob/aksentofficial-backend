@@ -92,7 +92,7 @@ app.get('/getUser', (req: any, res: any) => {
 app.post('/createUser', async (req: any, res: any) => {
     try{
         const user = new UsersModel({
-            ename: req.body.ename,
+            email: req.body.email,
             password: req.body.password,
             address: req.body.address,
             telephone: req.body.telephone,
