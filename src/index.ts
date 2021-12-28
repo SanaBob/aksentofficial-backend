@@ -76,7 +76,7 @@ app.post('/createProduct', async (req: any, res: any) => {
 app.get('/getUser', (req: any, res: any) => {
     try{
         if (req.query.email && req.query.password) {
-            UsersModel.findOne({name: req.query.email, password: req.query.password}, (err: any, doc: any) => {
+            UsersModel.findOne({email: req.query.email, password: req.query.password}, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
                 } else {
@@ -92,6 +92,7 @@ app.get('/getUser', (req: any, res: any) => {
 app.post('/createUser', async (req: any, res: any) => {
     try{
         const user = new UsersModel({
+            name: req.body.name,
             email: req.body.email,
             password: req.body.password,
             address: req.body.address,
