@@ -95,6 +95,7 @@ app.post('/createUser', async (req: any, res: any) => {
             ename: req.body.ename,
             password: req.body.password,
             address: req.body.address,
+            telephone: req.body.telephone,
             orders: [[]],
             role: 'customer',
         });
