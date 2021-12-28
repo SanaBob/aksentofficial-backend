@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { ProductModel } from './models/Products';
+import { UsersModel } from './models/Users';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -67,6 +68,38 @@ app.post('/createProduct', async (req: any, res: any) => {
         });
         await product.save();
         res.json(product);
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+app.get('/getUser', (req: any, res: any) => {
+    try{
+        if (!req.query.email && !req.query.password) {
+            UsersModel.findOne({name: req.query.email, password: req.query.password}, (err: any, doc: any) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(doc);
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e)
+    }
+});
+
+app.post('/createUser', async (req: any, res: any) => {
+    try{
+        const user = new UsersModel({
+            ename: req.body.ename,
+            password: req.body.password,
+            address: req.body.address,
+            orders: [[]],
+            role: 'customer',
+        });
+        await user.save();
+        res.json(user);
     } catch (e) {
         console.log(e)
     }
