@@ -75,7 +75,7 @@ app.post('/createProduct', async (req: any, res: any) => {
 
 app.get('/getUser', (req: any, res: any) => {
     try{
-        if (!req.query.email && !req.query.password) {
+        if (req.query.email && req.query.password) {
             UsersModel.findOne({name: req.query.email, password: req.query.password}, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
