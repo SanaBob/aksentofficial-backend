@@ -26,7 +26,7 @@ app.use(cors());
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`);
 
 app.get('/getProducts', (req: any, res) => {
-    try{
+    try {
         if (!req.query.id && !req.query.name) {
             ProductModel.find({}, (err: any, docs: any) => {
                 if (err) {
@@ -35,7 +35,7 @@ app.get('/getProducts', (req: any, res) => {
                     res.json(docs);
                 }
             });
-        } else if(req.query.id){
+        } else if (req.query.id) {
             ProductModel.findById(req.query.id, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
@@ -44,7 +44,7 @@ app.get('/getProducts', (req: any, res) => {
                 }
             });
         } else if (req.query.name) {
-            ProductModel.findOne({name: req.query.name}, (err: any, doc: any) => {
+            ProductModel.findOne({ name: req.query.name }, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
                 } else {
@@ -58,7 +58,7 @@ app.get('/getProducts', (req: any, res) => {
 });
 
 app.post('/createProduct', async (req: any, res: any) => {
-    try{
+    try {
         const product = new ProductModel({
             url1: req.body.url1,
             url2: req.body.url2,
@@ -76,8 +76,8 @@ app.post('/createProduct', async (req: any, res: any) => {
 
 //delete product
 app.delete('/deleteProduct', async (req: any, res: any) => {
-    try{
-        const product = await ProductModel.findOne({name: req.body.name});
+    try {
+        const product = await ProductModel.findOne({ name: req.body.name });
         await product.remove();
     } catch (e) {
         console.log(e)
@@ -86,8 +86,8 @@ app.delete('/deleteProduct', async (req: any, res: any) => {
 
 //update product
 app.put('/updateProduct', async (req: any, res: any) => {
-    try{
-        const product = await ProductModel.findOne({name: req.body.name});
+    try {
+        const product = await ProductModel.findOne({ name: req.body.name });
         product.url1 = req.body.url1 || product.url1;
         product.url2 = req.body.url2 || product.url2;
         product.color = req.body.color || product.color;
@@ -101,9 +101,9 @@ app.put('/updateProduct', async (req: any, res: any) => {
 })
 
 app.get('/getUser', (req: any, res: any) => {
-    try{
+    try {
         if (req.query.email && req.query.password) {
-            UsersModel.findOne({email: req.query.email, password: req.query.password}, (err: any, doc: any) => {
+            UsersModel.findOne({ email: req.query.email, password: req.query.password }, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
                 } else {
@@ -111,7 +111,7 @@ app.get('/getUser', (req: any, res: any) => {
                 }
             });
         } else if (req.query.email) {
-            UsersModel.findOne({email: req.query.email}, (err: any, doc: any) => {
+            UsersModel.findOne({ email: req.query.email }, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
                 } else {
@@ -125,7 +125,7 @@ app.get('/getUser', (req: any, res: any) => {
 });
 
 app.post('/createUser', async (req: any, res: any) => {
-    try{
+    try {
         const user = new UsersModel({
             name: req.body.name,
             email: req.body.email,
@@ -143,9 +143,17 @@ app.post('/createUser', async (req: any, res: any) => {
 })
 
 app.post('/updateUser', async (req: any, res: any) => {
-    try{
-        const user = await UsersModel.findOne({email: req.body.email});
-        user.password = req.body.password;
+    try {
+        let user;
+        if (req.body.name && req.body.email && req.body.password && req.body.address && req.body.telephone) {
+            user = await UsersModel.findOne({ email: req.body.email, password: req.body.password });
+            user.name = req.body.name || user.name;
+            user.address = req.body.address || user.address;
+            user.telephone = req.body.telephone || user.telephone;
+        } else if (req.body.name && req.body.email && req.body.password) {
+            user = await UsersModel.findOne({ email: req.body.email });
+            user.password = req.body.password;
+        }
         await user.save();
     } catch (e) {
         console.log(e)
