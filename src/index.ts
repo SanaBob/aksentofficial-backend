@@ -74,6 +74,32 @@ app.post('/createProduct', async (req: any, res: any) => {
     }
 })
 
+//delete product
+app.delete('/deleteProduct', async (req: any, res: any) => {
+    try{
+        const product = await ProductModel.findOne({name: req.body.name});
+        await product.remove();
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+//update product
+app.put('/updateProduct', async (req: any, res: any) => {
+    try{
+        const product = await ProductModel.findOne({name: req.body.name});
+        product.url1 = req.body.url1 || product.url1;
+        product.url2 = req.body.url2 || product.url2;
+        product.color = req.body.color || product.color;
+        product.size = req.body.size || product.size;
+        product.price = req.body.price || product.price;
+        await product.save();
+    }
+    catch (e) {
+        console.log(e)
+    }
+})
+
 app.get('/getUser', (req: any, res: any) => {
     try{
         if (req.query.email && req.query.password) {
@@ -121,7 +147,6 @@ app.post('/updateUser', async (req: any, res: any) => {
         const user = await UsersModel.findOne({email: req.body.email});
         user.password = req.body.password;
         await user.save();
-        res.json(user);
     } catch (e) {
         console.log(e)
     }
