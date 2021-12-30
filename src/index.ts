@@ -64,7 +64,8 @@ app.post('/createProduct', async (req: any, res: any) => {
             url2: req.body.url2,
             name: req.body.name,
             color: req.body.color,
-            size: req.body.size
+            size: req.body.size,
+            price: req.body.price
         });
         await product.save();
         res.json(product);
@@ -77,6 +78,14 @@ app.get('/getUser', (req: any, res: any) => {
     try{
         if (req.query.email && req.query.password) {
             UsersModel.findOne({email: req.query.email, password: req.query.password}, (err: any, doc: any) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(doc);
+                }
+            });
+        } else if (req.query.email) {
+            UsersModel.findOne({email: req.query.email}, (err: any, doc: any) => {
                 if (err) {
                     res.json(err);
                 } else {
