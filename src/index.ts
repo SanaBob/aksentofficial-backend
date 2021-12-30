@@ -116,6 +116,17 @@ app.post('/createUser', async (req: any, res: any) => {
     }
 })
 
+app.post('/updateUser', async (req: any, res: any) => {
+    try{
+        const user = await UsersModel.findOne({email: req.body.email});
+        user.password = req.body.password;
+        await user.save();
+        res.json(user);
+    } catch (e) {
+        console.log(e)
+    }
+})
+
 app.listen(process.env.PORT || 3001, () => {
     console.log('server started on port 3001');
 })
