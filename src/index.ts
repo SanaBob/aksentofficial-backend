@@ -75,10 +75,15 @@ app.post('/createProduct', async (req: any, res: any) => {
 })
 
 //delete product
-app.delete('/deleteProduct', async (req: any, res: any) => {
+app.delete('/deleteProduct/:id', async (req: any, res: any) => {
     try {
-        const product = await ProductModel.findById(req.query.id);
-        await product.remove();
+        ProductModel.findByIdAndDelete(req.params.id).exec((err: any, doc: any) => {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json(doc);
+            }
+        });
     } catch (e) {
         console.log(e)
     }
@@ -87,14 +92,16 @@ app.delete('/deleteProduct', async (req: any, res: any) => {
 //update product
 app.put('/updateProduct', async (req: any, res: any) => {
     try {
-        const product = await ProductModel.findById(req.body.id);
-        product.name = req.body.name || product.name;
-        product.url1 = req.body.url1 || product.url1;
-        product.url2 = req.body.url2 || product.url2;
-        product.color = req.body.color || product.color;
-        product.size = req.body.size || product.size;
-        product.price = req.body.price || product.price;
-        await product.save();
+        ProductModel.findById(req.body.id, (err: any, product: any) => {
+            product.name = req.body.name || product.name;
+            product.url1 = req.body.url1 || product.url1;
+            product.url2 = req.body.url2 || product.url2;
+            product.color = req.body.color || product.color;
+            product.size = req.body.size || product.size;
+            product.price = req.body.price || product.price;
+            product.save();
+            res.send("updated successfully");
+        })
     }
     catch (e) {
         console.log(e)
