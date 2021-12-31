@@ -96,8 +96,8 @@ app.put('/updateProduct', async (req: any, res: any) => {
             product.name = req.body.name || product.name;
             product.url1 = req.body.url1 || product.url1;
             product.url2 = req.body.url2 || product.url2;
-            product.color = req.body.color || product.color;
-            product.size = req.body.size || product.size;
+            product.color = req.body.color[0] ? req.body.color : product.color;
+            product.size = req.body.size[0] ? req.body.size : product.size;
             product.price = req.body.price || product.price;
             product.save();
             res.send("updated successfully");
