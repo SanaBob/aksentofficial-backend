@@ -77,7 +77,7 @@ app.post('/createProduct', async (req: any, res: any) => {
 //delete product
 app.delete('/deleteProduct', async (req: any, res: any) => {
     try {
-        const product = await ProductModel.findOne({ name: req.body.name });
+        const product = await ProductModel.findById(req.query.id);
         await product.remove();
     } catch (e) {
         console.log(e)
@@ -87,7 +87,8 @@ app.delete('/deleteProduct', async (req: any, res: any) => {
 //update product
 app.put('/updateProduct', async (req: any, res: any) => {
     try {
-        const product = await ProductModel.findOne({ name: req.body.name });
+        const product = await ProductModel.findById(req.body.id);
+        product.name = req.body.name || product.name;
         product.url1 = req.body.url1 || product.url1;
         product.url2 = req.body.url2 || product.url2;
         product.color = req.body.color || product.color;
